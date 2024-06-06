@@ -4,6 +4,7 @@ enum AppRouteEnum {
   calculatorView,
   productListView,
   addProductView,
+  mapView,
 }
 
 extension AppRouteExtension on AppRouteEnum {
@@ -15,6 +16,8 @@ extension AppRouteExtension on AppRouteEnum {
         return "/productlist_view";
       case AppRouteEnum.addProductView:
         return "/addproduct_view";
+      case AppRouteEnum.mapView:
+        return "/map_view";
       default:
         return "/home_view";
     }

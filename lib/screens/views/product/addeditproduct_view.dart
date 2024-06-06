@@ -6,10 +6,11 @@ import 'package:test_calculator/models/product/product_model.dart';
 import 'package:test_calculator/view_models/product/productlist_viewmodel.dart';
 
 class AddEditProductView extends StatefulWidget {
-  const AddEditProductView({super.key, required this.controller, this.product});
+  const AddEditProductView({super.key, required this.controller, this.product, required this.globalKeyAnimated});
 
   final ProductListViewModel controller;
   final ProductModel? product;
+  final GlobalKey<AnimatedListState>? globalKeyAnimated;
 
   @override
   State<AddEditProductView> createState() => _AddEditProductViewState();
@@ -129,7 +130,11 @@ class _AddEditProductViewState extends State<AddEditProductView> {
                   controller.addProduct(
                     name: _nameController.text,
                     price: _priceController.text
-                  ).then((value) => Navigator.pop(context));
+                  ).then((value) {
+                    Navigator.pop(context);
+                    int index = controller.productListState.value.productList.length;
+                    widget.globalKeyAnimated!.currentState!.insertItem(0, duration: const Duration(seconds: 2));
+                  });
                 },
                 child: Text(
                   isUpdate == true ? 'Edit' :'Add',

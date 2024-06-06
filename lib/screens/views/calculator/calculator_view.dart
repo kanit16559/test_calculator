@@ -69,7 +69,7 @@ class _CalculatorViewState extends State<CalculatorView> {
             ),
             KeyBoardNumBerWidget(
               controller: controller,
-            )
+            ),
           ],
         ),
       ),

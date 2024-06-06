@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:test_calculator/services/notification_service.dart';
 
+import '../../../core/app_injection.dart';
 import '../../../core/router/app_router_enum.dart';
+import '../../../services/firebase_service.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -10,6 +13,12 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
+  @override
+  void initState() {
+    AppInjections.internal.getItInstance<FirebaseService>().requestPermission();
+    super.initState();
+  }
 
 
   final ButtonStyle style = ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
@@ -46,6 +55,17 @@ class _HomeViewState extends State<HomeView> {
                 );
               },
               child: const Text('Products'),
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              style: style,
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  AppRouteEnum.mapView.name,
+                );
+              },
+              child: const Text('Map'),
             ),
           ],
         ),

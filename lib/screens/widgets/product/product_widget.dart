@@ -9,10 +9,12 @@ import '../../../core/router/app_router_enum.dart';
 import '../../../models/product/product_model.dart';
 
 class ProductWidget extends StatelessWidget {
-  const ProductWidget({super.key, required this.product, required this.controller});
+  const ProductWidget({super.key, required this.product, required this.controller, required this.index, required this.globalKeyAnimated});
 
   final ProductModel product;
   final ProductListViewModel controller;
+  final int index;
+  final GlobalKey<AnimatedListState> globalKeyAnimated;
 
 
   @override
@@ -29,8 +31,34 @@ class ProductWidget extends StatelessWidget {
             builder: (context) {
               return GestureDetector(
                 onTap: (){
-                  Slidable.of(context)!.close();
-                  controller.deleteData(product);
+                  Slidable.of(context)!.close().then((value) {
+                    controller.deleteData(product).then((value) {
+                      globalKeyAnimated.currentState?.removeItem(index, (context, animation) {
+                        return SlideTransition(
+                          key: UniqueKey(),
+                          position: Tween<Offset>(
+                            begin: const Offset(1.5, 0.0),
+                            end: Offset.zero,
+                          ).animate(
+                              CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeOutCirc,
+                              )
+                          ),
+                          child: ProductWidget(
+                            product: product,
+                            controller: controller,
+                            globalKeyAnimated: globalKeyAnimated,
+                            index: index,
+                            // animationSeconds: index+1,
+                          ),
+                        );
+                      }, duration: Duration(milliseconds: 800));
+                    });
+                  });
+
+
+                  // controller.deleteData(product);
                 },
                 child: Container(
                   height: double.infinity,
